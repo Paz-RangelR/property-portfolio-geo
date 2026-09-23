@@ -6,7 +6,7 @@
 > Built twice — R/Shiny and Python/Dash — over the same warehouse.
 > **Anonymized portfolio version — all data is synthetic.**
 
-![R](https://img.shields.io/badge/R-Shiny-276DC3) ![Python](https://img.shields.io/badge/Python-Dash-3776AB) ![Snowflake](https://img.shields.io/badge/Snowflake-Cortex-29B5E8) ![License](https://img.shields.io/badge/license-MIT-green)
+![R](https://img.shields.io/badge/R-Shiny-276DC3) ![Python](https://img.shields.io/badge/Python-Dash-3776AB) ![Snowflake](https://img.shields.io/badge/Snowflake-Cortex-29B5E8)
 
 **▶ Live demo:** *(pending deploy — the link goes here)*
 
@@ -199,7 +199,3 @@ This is a real production system, rewritten for public release:
 
 The architecture, the geodesic measurement, the inflation restatement and the Cortex
 integration are the real ones.
-
-## License
-
-MIT — see [LICENSE](LICENSE).
