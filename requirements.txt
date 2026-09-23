@@ -1,0 +1,15 @@
+# --- Demo map (this is what Streamlit Community Cloud installs) ---
+streamlit>=1.40
+pandas>=2.0
+pydeck>=0.9
+
+# --- Dash app in demo mode, on top of the above ---
+# dash>=2.16
+# dash-leaflet>=1.0.15
+# shapely>=2.0
+# pyproj>=3.6
+# openpyxl>=3.1
+
+# --- Against a real warehouse ---
+# snowflake-connector-python[pandas]>=3.6
+# cryptography>=41.0

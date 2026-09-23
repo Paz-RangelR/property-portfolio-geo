@@ -1,0 +1,244 @@
+/* ============================================================================
+   MAESTRO DE INMUEBLES ALMENA  ·  Réplica en Dash de la pestaña del Mapa
+   Paleta original:  #ff5b49 (coral) · #802e25 (vino) · #401712 (vino oscuro)
+   ============================================================================ */
+
+* { box-sizing: border-box; }
+
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: #ffffff !important;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* ============================================
+   BARRA SUPERIOR (navbar)
+   ============================================ */
+.mi-navbar {
+    background: #222222;
+    color: white;
+    padding: 14px 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+.mi-navbar .mi-title {
+    font-weight: bold;
+    font-size: 20px;
+    letter-spacing: .3px;
+}
+.mi-navbar .mi-tab {
+    background: #ff5b49;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 14px;
+    margin-left: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ============================================
+   LAYOUT PRINCIPAL
+   ============================================ */
+.mi-wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    min-height: calc(100vh - 56px);
+}
+
+/* ============================================
+   PANEL DE FILTROS (columna izquierda)
+   ============================================ */
+.filtros-panel {
+    background: linear-gradient(135deg, #ff5b49 0%, #ff5b49 100%);
+    padding: 20px;
+    box-shadow: 4px 0 15px rgba(230, 126, 34, 0.3);
+    width: 290px;
+    flex: 0 0 290px;
+    transition: all 0.35s ease;
+    overflow: visible;
+    position: relative;
+    z-index: 20;   /* el panel y sus desplegables por encima del mapa */
+}
+.filtros-panel.oculto { width: 0; flex-basis: 0; padding: 0; overflow: hidden; }
+
+.filtros-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.filtros-header h3 { color: white; margin: 0; font-weight: bold; }
+
+.hamburger-btn {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 2px solid white;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.3s ease;
+}
+.hamburger-btn:hover { background: rgba(255,255,255,0.35); }
+
+.filtros-panel hr { border-color: rgba(255,255,255,0.3); }
+
+.filtro-grupo { margin-bottom: 20px; }
+.filtro-label {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+}
+.filtro-check { color: white; font-size: 13px; margin-top: 12px; }
+
+/* Dropdowns dentro del panel de filtros */
+.filtros-panel .Select-control,
+.filtros-panel .Select--multi .Select-control {
+    background-color: white !important;
+    border: 2px solid rgba(255,255,255,0.5) !important;
+    border-radius: 5px !important;
+}
+.filtros-panel .Select-menu-outer { z-index: 3000 !important; }
+.filtros-panel .Select-value {
+    background-color: #802e25 !important;
+    color: white !important;
+    border: none !important;
+}
+.filtros-panel .Select-value-icon { border-right-color: rgba(255,255,255,0.4) !important; }
+
+/* Slider */
+.filtros-panel .rc-slider-track { background-color: #802e25 !important; }
+.filtros-panel .rc-slider-handle { border-color: #802e25 !important; background: white !important; }
+.filtros-panel .rc-slider-rail { background-color: rgba(255,255,255,0.5) !important; }
+.filtros-panel .rc-slider-mark-text { color: white !important; font-size: 10px; }
+
+/* Botones */
+.btn-mi {
+    display: block;
+    width: 100%;
+    border: none;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 15px;
+    transition: all .2s ease;
+}
+.btn-limpiar { background: white; color: #ff5b49; }
+.btn-vino    { background: #802e25; color: white; margin-top: 5px; }
+.btn-mi:hover { filter: brightness(0.95); transform: translateY(-1px); }
+
+/* Botón flotante para reabrir filtros */
+.boton-flotante {
+    position: absolute;
+    top: 90px;
+    left: 15px;
+    z-index: 1500;
+    background: #ff5b49;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(230,126,34,0.4);
+}
+
+/* ============================================
+   CONTENIDO DERECHO
+   ============================================ */
+.contenido-principal {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 18px;
+    transition: all 0.35s ease;
+}
+
+/* Fichas KPI */
+.kpi-row { display: flex; gap: 14px; margin-bottom: 16px; flex-wrap: nowrap; }
+.kpi-card {
+    flex: 1 1 0;
+    min-width: 0;
+    background: linear-gradient(135deg, #802e25 0%, #401712 100%);
+    padding: 14px 12px;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(251,140,0,0.3);
+}
+.kpi-card .kpi-valor {
+    margin: 0;
+    font-size: clamp(1.1rem, 1.5vw, 1.7rem);
+    font-weight: bold;
+    line-height: 1.15;
+    white-space: nowrap;
+}
+.kpi-card .kpi-label { margin: 5px 0 0 0; font-size: clamp(0.72rem, 0.8vw, 0.9rem); }
+
+/* Fila mapa + tabla */
+.mapa-tabla-row { display: flex; gap: 16px; flex-wrap: nowrap; }
+.caja-mapa, .caja-tabla { flex: 1 1 50%; min-width: 0; background: white; padding: 12px; border-radius: 10px; }
+.caja-mapa  {
+    border: 3px solid #ff5b49;
+    box-shadow: 0 4px 15px rgba(230,126,34,0.2);
+    position: relative;
+    z-index: 0;
+    isolation: isolate;   /* confina los controles de Leaflet a su propia capa */
+}
+.caja-tabla { border: 3px solid #802e25; box-shadow: 0 4px 15px rgba(243,156,18,0.2); }
+
+.caja-titulo {
+    padding: 8px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    font-size: 15px;
+}
+.titulo-mapa  { background: #ff5b49; }
+.titulo-tabla { background: linear-gradient(135deg, #802e25 0%, #ff5b49 100%); }
+
+/* Mapa */
+#mapa_inmuebles { height: 62vh; border-radius: 6px; }
+.leaflet-top, .leaflet-bottom { z-index: 400 !important; }
+
+/* En pantallas angostas, mapa y tabla se apilan */
+@media (max-width: 1100px) {
+    .mapa-tabla-row { flex-wrap: wrap; }
+    .caja-mapa, .caja-tabla { flex: 1 1 100%; }
+    .kpi-row { flex-wrap: wrap; }
+    .kpi-card { flex: 1 1 45%; }
+}
+
+/* Tabla */
+.caja-tabla .dash-table-container { max-height: 72vh; overflow: auto; }
+.caja-tabla table { font-size: 13px; }
+
+/* Popup de Leaflet (hereda estilos inline pero afinamos el contenedor) */
+.leaflet-popup-content { margin: 12px 14px; }
+
+/* Notificaciones */
+.mi-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #802e25;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    z-index: 5000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    font-weight: bold;
+}
