@@ -117,11 +117,18 @@ st.pydeck_chart(pdk.Deck(
         longitude=float(d["LONGITUD"].mean()),
         zoom=4.6, pitch=35),
     layers=[
-        pdk.Layer("PolygonLayer", data=mapa,
+        # El `id` explicito no es cosmetico. Sin el, pydeck le pone a cada capa
+        # un UUID nuevo en cada rerun, y como Streamlit re-ejecuta el script
+        # completo cada vez que alguien mueve un filtro, deck.gl cree que las
+        # capas anteriores desaparecieron: las destruye mientras todavia esta
+        # dibujando y truena con "Cannot read properties of null". Con un id
+        # estable reconoce que es la misma capa con datos nuevos y solo la
+        # actualiza.
+        pdk.Layer("PolygonLayer", id="parcelas", data=mapa,
                   get_polygon="POLIGONO", get_fill_color="color",
                   get_line_color=[255, 255, 255], line_width_min_pixels=1,
                   opacity=0.55, pickable=True, stroked=True, filled=True),
-        pdk.Layer("ScatterplotLayer", data=mapa,
+        pdk.Layer("ScatterplotLayer", id="centroides", data=mapa,
                   get_position="[LONGITUD, LATITUD]", get_fill_color="color",
                   get_radius=1600, radius_min_pixels=4, pickable=True),
     ],
