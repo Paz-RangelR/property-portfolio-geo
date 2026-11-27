@@ -122,7 +122,7 @@ Two of the three run with no credentials.
 ### The map (Streamlit — this is what gets deployed)
 
 ```bash
-git clone https://github.com/chino-bot1701/property-portfolio-geo.git
+git clone https://github.com/Paz-RangelR/property-portfolio-geo.git
 cd property-portfolio-geo
 pip install streamlit pandas pydeck
 streamlit run demo/app_demo.py
