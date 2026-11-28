@@ -11,6 +11,10 @@ library(openxlsx)
 library(jose)    
 library(openssl) 
 
+# Users come from APP_USERS (salted hashes, never passwords); see R/auth.R.
+source(file.path(if (dir.exists("R")) "R" else ".", "auth.R"))
+usuarios_validos <- cargar_usuarios()
+
 tryCatch({
   source("Excel.R")
 }, error = function(e) {
@@ -2042,15 +2046,6 @@ server <- function(input, output, session) {
   # SISTEMA DE AUTENTICACIÓN
   # ==========================================================================
   
-  # Usuarios y contraseñas hardcodeados
-  usuarios_validos <- list(
-    "sofia.ibarra@almena.mx" = "A7F3K9M2Q8",
-    "paula.serna@almena.mx" = "B9K2M7Q4A8", 
-    "miguel.rios@almena.mx" = "F3A8Q6K9M2",
-    "carlos.duarte@almena.mx" = "7M2KQ8A9F3",
-    "ana.martinez@almena.mx" = "Q4A9M2K7F8",
-    "1" = "1"
-  )
   
   # Variable reactiva para controlar autenticación
   usuario_autenticado <- reactiveVal(FALSE)
@@ -2072,8 +2067,7 @@ server <- function(input, output, session) {
     }
     
     # Validar credenciales
-    if (usuario %in% names(usuarios_validos) && 
-        usuarios_validos[[usuario]] == password) {
+    if (verificar_credenciales(usuario, password, usuarios_validos)) {
       
       # Login exitoso
       usuario_autenticado(TRUE)
