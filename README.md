@@ -151,6 +151,10 @@ cp .env.example .env     # fill in
 Rscript -e 'shiny::runApp("R/maestro_inmuebles.R")'
 ```
 
+Login users are read from `APP_USERS` as salted `bcrypt-pbkdf` hashes (see `R/auth.R`):
+the repository holds no credentials, and neither does `.env` hold a usable password.
+`Rscript tests/test_auth.R` checks the module.
+
 > If the deployed demo is asleep, the first load takes about 40 seconds while the free
 > instance wakes up.
 
@@ -175,6 +179,7 @@ R/estatus_actividad.R          activity status, fuzzy matching with stringdist
 R/fichas_prediales.R           tax records, PDF and image handling
 R/disponibilidad_locales.R     retail availability
 R/excel.R                      institutional Excel export
+R/auth.R                       shared login: hashed users from APP_USERS
 python/app.py                  Dash + dash-leaflet map (runs with DEMO_MODE=1)
 python/enriquecer_gmaps.py     Google Places ratings enrichment
 demo/fixtures.py               synthetic portfolio with real WGS84 geometry
@@ -193,6 +198,9 @@ This is a real production system, rewritten for public release:
 - The Snowflake account, the service user and the private-key path come from
   environment variables; see `.env.example`. Nothing is committed.
 - Colleagues' email addresses in the original were replaced.
+- The original apps kept their login users in the source. Authentication now lives in
+  one module, `R/auth.R`, shared by the four apps: users come from the environment,
+  passwords are stored only as salted hashes, and comparison is constant-time.
 - The 32-state catalogue in `edicion_inmueble.R` is kept: it is a national catalogue,
   it identifies nobody, and removing it would break the form.
 - The INPC is a public INEGI index; the demo series is synthetic but shaped like it.

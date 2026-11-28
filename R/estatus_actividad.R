@@ -9,6 +9,10 @@ library(openssl)
 library(sf)          
 library(stringdist)  
 
+# Users come from APP_USERS (salted hashes, never passwords); see R/auth.R.
+source(file.path(if (dir.exists("R")) "R" else ".", "auth.R"))
+usuarios_validos <- cargar_usuarios()
+
 # ==============================================================================
 # FUNCIONES DE CONEXIÓN A SNOWFLAKE
 # ==============================================================================
@@ -858,13 +862,6 @@ server <- function(input, output, session) {
   # SISTEMA DE AUTENTICACIÓN
   # ==========================================================================
   
-  # Usuarios y contraseñas hardcodeados
-  usuarios_validos <- list(
-    "sofia.ibarra@almena.mx" = "A7F3K9M2Q8",
-    "paula.serna@almena.mx" = "B9K2M7Q4A8",
-    "miguel.rios@almena.mx" = "F3A8Q6K9M2",
-    "1" = "1"
-  )
   
   # Variable reactiva para controlar autenticación
   usuario_autenticado <- reactiveVal(FALSE)
@@ -886,8 +883,7 @@ server <- function(input, output, session) {
     }
     
     # Validar credenciales
-    if (usuario %in% names(usuarios_validos) && 
-        usuarios_validos[[usuario]] == password) {
+    if (verificar_credenciales(usuario, password, usuarios_validos)) {
       
       # Login exitoso
       usuario_autenticado(TRUE)
